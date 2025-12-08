@@ -15,10 +15,14 @@ class OverviewAgent(BaseMobilityAgent):
   "behavioural_secondary": []
 }
 
+Your content must provide meaningful explanation, not generic statements.
+Describe what the mobility measure fundamentally is, how it works, and why it matters.
+The behavioural fields must describe real behavioural dynamics, not vague goals.
+
 Rules:
-- description = 2–3 sentences max.
-- behavioural_primary = one clear behavioural goal.
-- behavioural_secondary = 2–4 supporting behaviours.'''
+- description = 2–3 sentences providing substantive explanation of what this measure is and how it functions
+- behavioural_primary = describe the main behavioural change this measure aims to influence and why
+- behavioural_secondary = 2–4 supporting behavioural patterns, each explained clearly'''
     
     def __init__(self):
         super().__init__("overview", self.SCHEMA_PROMPT)

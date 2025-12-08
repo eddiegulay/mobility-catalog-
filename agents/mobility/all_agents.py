@@ -23,9 +23,15 @@ class EvidenceAgent(BaseMobilityAgent):
   "behavioural": []
 }
 
+Provide descriptive, research-aligned insights.
+Each bullet must convey an actual finding or pattern.
+Avoid clichés like "this increases sustainability".
+Base statements on known mobility principles (secure parking improves cycling rates, proximity increases mode choice likelihood, etc.)
+
 Rules:
-- Use general validated patterns, not fabricated claims.
-- 1–3 lines per field.'''
+- Each item should be a meaningful insight, not a generic claim
+- Reference real mobility patterns and principles
+- 1–3 substantive points per field'''
     
     def __init__(self):
         super().__init__("evidence", self.SCHEMA_PROMPT)
@@ -54,7 +60,13 @@ class ImpactAgent(BaseMobilityAgent):
   "other": ""
 }
 
-Use qualitative or range-based values.'''
+Describe expected impacts in meaningful qualitative ranges.
+Avoid single words like "high" unless paired with detail (e.g., "high, especially in dense districts where cycling is common").
+
+Rules:
+- Provide context and reasoning for each impact level
+- Use qualitative ranges with explanation when possible
+- Connect impacts to specific conditions or user groups'''
     
     def __init__(self):
         super().__init__("impact", self.SCHEMA_PROMPT)
@@ -80,7 +92,16 @@ class RequirementsAgent(BaseMobilityAgent):
   "accessibility": [],
   "information": [],
   "quality_standards": []
-}'''
+}
+
+Each requirement must be descriptive and concrete.
+Avoid terms like "secure bike parking" alone.
+Instead describe what security means (locking points, CCTV, lighting, enclosure quality).
+
+Rules:
+- Explain WHAT each requirement consists of
+- Describe WHY it matters for implementation
+- Provide specific, actionable detail'''
     
     def __init__(self):
         super().__init__("requirements", self.SCHEMA_PROMPT)
@@ -105,7 +126,15 @@ class InfrastructureAgent(BaseMobilityAgent):
   "weather_protection": [],
   "placement_rules": [],
   "notes": ""
-}'''
+}
+
+For each item, describe physical characteristics, spatial standards, dimensions, environmental considerations, and user experience.
+Avoid simple nouns; provide meaningful explanation.
+
+Rules:
+- Describe WHAT the infrastructure consists of physically
+- Include relevant dimensions, materials, or technical specs when applicable
+- Explain HOW placement or design affects functionality'''
     
     def __init__(self):
         super().__init__("infrastructure", self.SCHEMA_PROMPT)
@@ -135,7 +164,17 @@ class OperationsAgent(BaseMobilityAgent):
     "data_reporting": [],
     "upgrades": []
   }
-}'''
+}
+
+Instead of listing actors, describe their operational role in a meaningful way:
+- What the developer maintains during construction
+- What housing associations oversee day-to-day
+- What mobility providers are responsible for regarding service reliability
+
+Rules:
+- Describe WHAT each actor actually does operationally
+- Explain responsibilities with context
+- For phases, describe activities with operational or planning detail'''
     
     def __init__(self):
         super().__init__("operations", self.SCHEMA_PROMPT)
@@ -160,7 +199,13 @@ class CostsAgent(BaseMobilityAgent):
   "benefits": []
 }
 
-Values for upfront and operational must be qualitative ("low", "medium", "high").'''
+Provide qualitative ranges AND explanation.
+Example: "Upfront cost: medium — typically involves shelter installation, structural anchoring, and durable fixtures."
+
+Rules:
+- Use qualitative levels (low/medium/high) with reasoning
+- Explain WHAT drives costs
+- Describe benefits with specific detail'''
     
     def __init__(self):
         super().__init__("costs", self.SCHEMA_PROMPT)
@@ -185,7 +230,14 @@ class RisksAgent(BaseMobilityAgent):
   "risk_3": ""
 }
 
-No more than 3 risks.'''
+Each risk must describe WHY the risk occurs and HOW it affects implementation or adoption.
+Avoid generic phrasing.
+
+Rules:
+- Explain the risk mechanism, not just naming it
+- Describe impact on implementation or user adoption
+- Provide context on likelihood or severity
+- Maximum 3 most significant risks'''
     
     def __init__(self):
         super().__init__("risks", self.SCHEMA_PROMPT)
@@ -209,9 +261,13 @@ class MonitoringAgent(BaseMobilityAgent):
   "frequency": ""
 }
 
+Metrics must be measurable and meaningful.
+Describe what each metric actually captures.
+
 Rules:
-- 3–6 metrics max.
-- Frequency should be "quarterly", "annual", etc.'''
+- 3–6 specific, measurable metrics
+- Explain WHAT each metric measures and WHY it matters
+- Frequency should include reasoning (e.g., "Quarterly to capture seasonal patterns")'''
     
     def __init__(self):
         super().__init__("monitoring", self.SCHEMA_PROMPT)
@@ -236,7 +292,14 @@ class ChecklistAgent(BaseMobilityAgent):
   "after_move_in": []
 }
 
-Each list = 3–6 steps.'''
+Checklists must describe the intention behind each step.
+For example: "Assess evening visibility to ensure safe access during winter months."
+
+Rules:
+- Each item = 3–6 steps per phase
+- Describe WHAT to verify/do and WHY it matters
+- Provide actionable detail, not generic tasks
+- Include context on timing, conditions, or stakeholders involved'''
     
     def __init__(self):
         super().__init__("checklist", self.SCHEMA_PROMPT)
@@ -264,7 +327,15 @@ class LifecycleAgent(BaseMobilityAgent):
   "stage_6_long_term": []
 }
 
-2–5 items per stage.'''
+Each lifecycle item must describe activities with operational or planning detail.
+Avoid listing 'design' or 'choose'.
+Include considerations, dependencies, or planning context.
+
+Rules:
+- 2–5 items per stage
+- Describe WHAT happens and WHY it's important at this stage
+- Include dependencies, stakeholder coordination, or critical decisions
+- Provide planning context, not just action verbs'''
     
     def __init__(self):
         super().__init__("lifecycle", self.SCHEMA_PROMPT)
@@ -303,7 +374,15 @@ class RolesAgent(BaseMobilityAgent):
     "regulation": [],
     "monitoring": []
   }
-}'''
+}
+
+Each responsibility must state what the actor actually DOES and WHY their role matters.
+Avoid simple labels like "maintenance".
+
+Rules:
+- Describe concrete responsibilities with context
+- Explain HOW each role contributes to measure success
+- Provide operational detail on what tasks involve'''
     
     def __init__(self):
         super().__init__("roles", self.SCHEMA_PROMPT)
@@ -341,9 +420,14 @@ class FinancialAgent(BaseMobilityAgent):
   "incentives": []
 }
 
+Costs and savings must include reasoning and context.
+Avoid generic terms without explanation.
+
 Rules:
-- Use qualitative/semi-quantitative values.
-- incentives: 1–3 items max.'''
+- Use qualitative/semi-quantitative values with explanation
+- Describe WHAT drives each cost component
+- Explain HOW savings materialize
+- incentives: 1–3 items with specific detail on requirements or mechanisms'''
     
     def __init__(self):
         super().__init__("financial", self.SCHEMA_PROMPT)
@@ -367,7 +451,16 @@ class ComplianceAgent(BaseMobilityAgent):
   "documentation_required": [],
   "approval_process": [],
   "non_compliance_actions": []
-}'''
+}
+
+Explain compliance expectations clearly.
+Documentation items should describe what they validate.
+
+Rules:
+- Describe WHAT each requirement ensures
+- Explain WHY documentation is needed
+- Detail approval steps with stakeholders involved
+- Describe consequences and remediation for non-compliance'''
     
     def __init__(self):
         super().__init__("compliance", self.SCHEMA_PROMPT)
@@ -390,7 +483,14 @@ class VisibilityAgent(BaseMobilityAgent):
   "signage": [],
   "digital": [],
   "physical_touchpoints": []
-}'''
+}
+
+Describe what signage or communication elements actually convey and how they support adoption.
+
+Rules:
+- Explain WHAT information each element communicates
+- Describe WHERE and WHEN users encounter it
+- Explain HOW it supports awareness or usage'''
     
     def __init__(self):
         super().__init__("visibility", self.SCHEMA_PROMPT)
@@ -413,7 +513,15 @@ class SelectionAgent(BaseMobilityAgent):
   "requires": [],
   "not_recommended_if": [],
   "recommended_combination": []
-}'''
+}
+
+Provide meaningful context for suitability decisions.
+Avoid simple yes/no phrases.
+
+Rules:
+- Describe prerequisites with reasoning
+- Explain WHY certain conditions make this unsuitable
+- Suggest combinations that enhance effectiveness with explanation'''
     
     def __init__(self):
         super().__init__("selection", self.SCHEMA_PROMPT)
@@ -435,7 +543,15 @@ class ScalabilityAgent(BaseMobilityAgent):
 {
   "conditions_for_expansion": [],
   "extensions": []
-}'''
+}
+
+Explain what conditions signal demand growth or operational expansion.
+Give realistic extensions.
+
+Rules:
+- Describe indicators that would justify expansion
+- Explain HOW extensions would build on initial implementation
+- Provide context on timing, demand thresholds, or enabling factors'''
     
     def __init__(self):
         super().__init__("scalability", self.SCHEMA_PROMPT)

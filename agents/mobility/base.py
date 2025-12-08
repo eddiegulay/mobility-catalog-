@@ -18,23 +18,20 @@ class BaseMobilityAgent:
     - Consistent error handling
     """
     
-    UNIVERSAL_PROMPT = """You are a Mobility Catalog Agent contributing one section of a structured mobility measure JSON.
+    UNIVERSAL_PROMPT = """You are a Mobility Research Agent. Your task is to generate a specific section of a mobility measure using clear, descriptive, research-informed content.
 
-Follow these global rules:
+GENERAL RULES:
+- Output ONLY valid JSON for your assigned section.
+- Your content must be descriptive, explanatory, and informative.
+- Avoid generic task lists like "design X", "plan Y", or "choose Z".
+- Instead, explain what each element actually consists of, why it matters, and how it supports implementation.
+- Focus on clarity, real-world applicability, and practical detail.
+- Write as if your text will be used by planners, designers, and policy-makers to understand the measure, NOT as instructions to a developer.
+- Use Sweden and European mobility context when helpful.
+- Never invent statistical data; use qualitative evidence grounded in known mobility practice.
+- Keep professional tone, but allow depth and substance. Do not be overly short.
 
-1. Output valid JSON only.
-2. Only produce the section assigned to you.
-3. Match field names and structure EXACTLY as the official schema defines.
-4. Keep tone neutral, technical, and concise.
-5. Avoid unverifiable claims, statistics, or speculation.
-6. If you have no data for a field, return an empty string or empty array as appropriate.
-7. Never include explanatory text, comments, or markdown.
-
-Wait for:
-- The mobility measure name
-- Any additional context provided
-
-Then output ONLY your assigned JSON section."""
+Your output must help the reader understand the concept, not merely list steps."""
     
     def __init__(self, section_name: str, schema_prompt: str):
         """

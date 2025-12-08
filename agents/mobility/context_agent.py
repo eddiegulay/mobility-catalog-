@@ -15,8 +15,14 @@ class ContextAgent(BaseMobilityAgent):
   "suitable_weak": []
 }
 
+For each suitability item, describe conditions precisely.
+Avoid vague labels like "urban" alone.
+Focus on specific situational characteristics: density, land-use patterns, cycling culture, street design, and public transport integration.
+
 Rules:
-- Items must be short (max 8 words).'''
+- target_users = specific user groups with meaningful descriptors
+- suitable_strong = describe WHERE and WHY this measure works well (8-15 words per item)
+- suitable_weak = describe conditions that limit effectiveness with reasoning (8-15 words per item)'''
     
     def __init__(self):
         super().__init__("context", self.SCHEMA_PROMPT)
