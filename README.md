@@ -95,46 +95,36 @@ uv run python main.py
 
 **Interactive Mode:**
 ```
-🔍 Your Question: What are the key benefits of LangGraph?
+🔍 Your Question: What is machine learning?
 
 🤔 Researching... (Query #1)
 
-📝 Summary:
+💡 Answer:
 ------------------------------------------------------------
-LangGraph provides a powerful framework for building stateful 
-AI agents with explicit control flow, enabling complex multi-step 
-reasoning and tool integration.
+Machine learning is a subset of artificial intelligence that 
+enables machines to learn from data and improve their performance 
+over time. It involves training algorithms on data to make 
+predictions, classify objects, or generate insights...
 
-✨ Key Points:
+⏰ Timestamp:
 ------------------------------------------------------------
-1. Graph-based architecture allows for complex, non-linear workflows
-2. State management through typed schemas ensures data consistency
-3. Conditional edges enable dynamic decision-making
-4. Built-in integration with LangChain ecosystem
-
-📚 Sources:
-------------------------------------------------------------
-LLM Query Analysis, LLM Research Database, LLM Synthesis Engine
+2025-12-08 21:47:57
+============================================================
 ```
 
 **JSON Mode (main.py):**
 ```json
 {
-  "query": "What are the key benefits of LangGraph for building AI agents?",
-  "summary": "LangGraph provides a powerful framework for building stateful AI agents with explicit control flow, enabling complex multi-step reasoning and tool integration.",
-  "key_points": [
-    "State management through typed schemas ensures data consistency",
-    "Graph-based architecture allows for complex, non-linear workflows",
-    "Conditional edges enable dynamic decision-making during execution",
-    "Built-in integration with LangChain ecosystem"
-  ],
-  "sources_consulted": [
-    "LLM Query Analysis",
-    "LLM Research Database",
-    "LLM Synthesis Engine"
-  ]
+  "question": "What is machine learning?",
+  "answer": "Machine learning is a subset of artificial intelligence that enables machines to learn from data and improve their performance over time...",
+  "time_date": "2025-12-08T21:47:57.477592"
 }
 ```
+
+The JSON output includes:
+- `question`: The original query
+- `answer`: A comprehensive, well-structured answer
+- `time_date`: ISO 8601 timestamp of when the answer was generated
 
 ## 🧠 How It Works
 
@@ -154,9 +144,8 @@ The research agent follows a three-stage pipeline:
 
 3. **Synthesize** (`synthesize_node`)
    - Consolidates research findings
-   - Creates a concise summary
-   - Extracts key points
-   - Formats output as structured JSON
+   - Creates a comprehensive, well-structured answer
+   - Formats output as structured JSON with timestamp
 
 ### State Management
 

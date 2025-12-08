@@ -93,48 +93,25 @@ def synthesize_node(state: ResearchState) -> ResearchState:
     
     messages = [
         SystemMessage(content=(
-            "You are a research synthesizer. Create a concise summary and extract "
-            "3-5 key points from the research findings. Format your response as:\n"
-            "SUMMARY: [brief 2-3 sentence summary]\n"
-            "KEY_POINTS:\n- [point 1]\n- [point 2]\n- [point 3]\n..."
+            "You are a research synthesizer. Create a comprehensive, well-structured answer "
+            "that synthesizes all the research findings. The answer should be clear, informative, "
+            "and directly address the user's question. Include key insights and important details."
         )),
         HumanMessage(content=(
             f"Query: {state['query']}\n\n"
             f"Research Notes:\n{state.get('internal_notes', '')}\n\n"
-            "Synthesize this into a summary and key points."
+            "Provide a comprehensive answer to this query based on the research."
         ))
     ]
     
     response = llm.invoke(messages)
-    content = response.content
-    
-    # Parse the response
-    summary = ""
-    key_points = []
-    
-    if "SUMMARY:" in content:
-        summary_part = content.split("SUMMARY:")[1].split("KEY_POINTS:")[0].strip()
-        summary = summary_part
-    
-    if "KEY_POINTS:" in content:
-        points_part = content.split("KEY_POINTS:")[1].strip()
-        key_points = [
-            line.strip("- ").strip() 
-            for line in points_part.split("\n") 
-            if line.strip().startswith("-")
-        ]
-    
-    # Fallback if parsing fails
-    if not summary:
-        summary = content[:200] + "..." if len(content) > 200 else content
-    if not key_points:
-        key_points = ["Research completed - see summary for details"]
+    answer = response.content.strip()
     
     logger.info("Synthesis complete!")
     
     return {
         **state,
-        "summary": summary,
-        "key_points": key_points,
+        "summary": answer,  # Store the answer in summary field
+        "key_points": [],   # Keep for backward compatibility
         "sources_consulted": ["LLM Synthesis Engine"]
     }

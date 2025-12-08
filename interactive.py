@@ -59,24 +59,15 @@ def format_response_for_cli(result: dict) -> str:
     Returns:
         Formatted string for display
     """
+    from datetime import datetime
+    
     lines = []
-    lines.append("\n📝 Summary:")
+    lines.append("\n💡 Answer:")
     lines.append("-" * 60)
-    lines.append(result.get("summary", "No summary available"))
-    
-    key_points = result.get("key_points", [])
-    if key_points:
-        lines.append("\n✨ Key Points:")
-        lines.append("-" * 60)
-        for i, point in enumerate(key_points, 1):
-            lines.append(f"{i}. {point}")
-    
-    sources = result.get("sources_consulted", [])
-    if sources:
-        lines.append("\n📚 Sources:")
-        lines.append("-" * 60)
-        lines.append(", ".join(sources))
-    
+    lines.append(result.get("summary", "No answer available"))
+    lines.append("\n⏰ Timestamp:")
+    lines.append("-" * 60)
+    lines.append(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     lines.append("\n" + "=" * 60)
     
     return "\n".join(lines)

@@ -6,19 +6,20 @@ from typing import Any, Dict
 
 def format_research_output(state: Dict[str, Any]) -> str:
     """
-    Format research agent state into pretty-printed JSON.
+    Format research agent state into structured JSON output.
     
     Args:
         state: Research agent state dictionary
         
     Returns:
-        Pretty-printed JSON string
+        JSON string with question, answer, and timestamp
     """
+    from datetime import datetime
+    
     output = {
-        "query": state.get("query", ""),
-        "summary": state.get("summary", ""),
-        "key_points": state.get("key_points", []),
-        "sources_consulted": state.get("sources_consulted", [])
+        "question": state.get("query", ""),
+        "answer": state.get("summary", ""),
+        "time_date": datetime.now().isoformat()
     }
     
     return json.dumps(output, indent=2, ensure_ascii=False)
@@ -26,7 +27,7 @@ def format_research_output(state: Dict[str, Any]) -> str:
 
 def validate_research_output(state: Dict[str, Any]) -> bool:
     """
-    Validate that research output has all required fields.
+    Validate that research output has required fields.
     
     Args:
         state: Research agent state dictionary
@@ -34,18 +35,14 @@ def validate_research_output(state: Dict[str, Any]) -> bool:
     Returns:
         True if valid, False otherwise
     """
-    required_fields = ["query", "summary", "key_points", "sources_consulted"]
+    required_fields = ["query", "summary"]
     
     for field in required_fields:
         if field not in state:
             return False
         
         # Validate types
-        if field == "query" and not isinstance(state[field], str):
-            return False
-        if field == "summary" and not isinstance(state[field], str):
-            return False
-        if field in ["key_points", "sources_consulted"] and not isinstance(state[field], list):
+        if not isinstance(state[field], str):
             return False
     
     return True
