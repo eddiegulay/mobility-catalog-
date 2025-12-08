@@ -34,7 +34,7 @@ Rules:
 
 def meta_agent_node(state: MobilityResearchState) -> dict:
     """LangGraph node function for meta agent."""
-    from utils.image_search import get_mobility_measure_images
+    from utils.image_search import search_mobility_images
     
     agent = MetaAgent()
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
@@ -42,11 +42,12 @@ def meta_agent_node(state: MobilityResearchState) -> dict:
     if error:
         return {"meta": {}, "errors": [error]}
     
-    # Add images automatically
+    # Add images automatically using Pexels API
     if result and "images" in result:
         try:
-            images = get_mobility_measure_images(state["measure_name"], count=3)
+            images = search_mobility_images(state["measure_name"], count=3)
             result["images"] = images
+            logger.info(f"Added {len(images)} images to meta section")
         except Exception as e:
             logger.error(f"Failed to fetch images: {e}")
             result["images"] = []
