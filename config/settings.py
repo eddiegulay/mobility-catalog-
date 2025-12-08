@@ -15,7 +15,7 @@ class Settings:
     PEXELS_API_KEY: str = os.getenv("PEXELS_API_KEY", "")
     
     # LLM Configuration
-    MODEL_NAME: str = os.getenv("MODEL_NAME", "llama-3.3-70b-versatile")
+    MODEL_NAME: str = os.getenv("MODEL_NAME", "openai/gpt-oss-120b")
     TEMPERATURE: float = float(os.getenv("TEMPERATURE", "0.7"))
     MAX_TOKENS: int = int(os.getenv("MAX_TOKENS", "2048"))
     
