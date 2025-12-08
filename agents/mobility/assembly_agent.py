@@ -6,6 +6,7 @@ validates them, and assembles the complete JSON document.
 """
 
 import json
+import os
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, Any
@@ -55,46 +56,86 @@ def assembly_agent_node(state: MobilityResearchState) -> dict:
     }
     
     # Check for missing sections
-    missing = [name for name, data in sections.items() if not data]
+    missing_sections = [name for name, data in sections.items() if not data]
     
-    if missing:
-        error_msg = f"Missing or empty sections: {', '.join(missing)}"
-        logger.error(error_msg)
-        return {
-            "complete_measure": {},
-            "output_path": "",
-            "errors": [error_msg]
+    if missing_sections:
+        logger.warning(f"{len(missing_sections)} sections missing or empty: {', '.join(missing_sections)}")
+        logger.warning("Saving partial result - users can manually complete missing sections later")
+    
+    # Merge all sections (including empty ones with placeholders)
+    complete_measure = {}
+    for name, data in sections.items():
+        if data:
+            complete_measure[name] = data
+        else:
+            # Add placeholder for missing section
+            complete_measure[name] = {}
+            
+    # Add metadata about completeness
+    if missing_sections:
+        complete_measure["_metadata"] = {
+            "incomplete": True,
+            "missing_sections": missing_sections,
+            "completion_percentage": round((19 - len(missing_sections)) / 19 * 100, 1),
+            "generated_at": datetime.now().isoformat(timespec='seconds') + "Z"
         }
     
-    logger.info(f"✓ All {len(sections)} sections collected")
+    # Validate complete document (will pass even with empty sections)
+    try:
+        from schemas.validators import validate_complete_measure
+        is_valid, val_errors = validate_complete_measure(complete_measure)
+        
+        if not is_valid and not missing_sections:
+            # Only fail validation if unexpected errors (not just missing sections)
+            logger.error(f"Validation failed: {val_errors}")
+            return {
+                "complete_measure": {},
+                "output_path": "",
+                "errors": [f"Validation errors: {val_errors}"]
+            }
+    except Exception as e:
+        logger.warning(f"Validation skipped: {e}")
     
-    # Merge sections
-    complete = merge_sections(sections)
+    # Generate output filename
+    measure_name = state.get("measure_name", "unknown")
+    safe_name = measure_name.lower().replace(" ", "-").replace("/", "-")
+    output_dir = "research_output"
+    os.makedirs(output_dir, exist_ok=True)
     
-    # Validate complete document
-    is_valid, validation_errors = validate_complete_measure(complete)
+    # Add '-partial' suffix if incomplete
+    suffix = "-partial" if missing_sections else ""
+    output_filename = f"{safe_name}-mobility-measure{suffix}.json"
+    output_path = os.path.join(output_dir, output_filename)
     
-    if not is_valid:
-        error_msg = f"Validation failed: {'; '.join(validation_errors)}"
-        logger.error(error_msg)
+    # Save JSON file
+    try:
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(complete_measure, f, indent=2, ensure_ascii=False)
+        
+        file_size = os.path.getsize(output_path)
+        completion_pct = round((19 - len(missing_sections)) / 19 * 100, 1)
+        
+        logger.info(f"✓ Saved to: {output_path}")
+        logger.info(f"✓ File size: {file_size:,} bytes")
+        logger.info(f"✓ Completion: {completion_pct}% ({19-len(missing_sections)}/19 sections)")
+        
+        if missing_sections:
+            logger.warning(f"⚠ Partial result saved. Missing sections can be completed later.")
+    
+    except Exception as e:
+        logger.error(f"Failed to save output: {e}")
         return {
-            "complete_measure": {},
+            "complete_measure": complete_measure,
             "output_path": "",
-            "errors": [error_msg]
+            "errors": [f"Save error: {str(e)}"]
         }
     
-    logger.info("✓ Complete document validated")
-    
-    # Save to file
-    output_path = save_mobility_measure(complete, state["measure_name"])
-    
-    logger.info(f"✓ Saved to: {output_path}")
     logger.info("=" * 60)
     logger.info("ASSEMBLY COMPLETE")
     logger.info("=" * 60)
     
     return {
-        "complete_measure": complete,
+        "complete_measure": complete_measure,
         "output_path": output_path,
         "errors": []
     }

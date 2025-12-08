@@ -15,9 +15,20 @@ class Settings:
     PEXELS_API_KEY: str = os.getenv("PEXELS_API_KEY", "")
     
     # LLM Configuration
-    MODEL_NAME: str = os.getenv("MODEL_NAME", "llama-3.3-70b-versatile")
+    MODEL_NAME: str = os.getenv("MODEL_NAME", "openai/gpt-oss-120b")
+    FALLBACK_MODEL: str = os.getenv("FALLBACK_MODEL", "llama-3.3-70b-versatile")
     TEMPERATURE: float = float(os.getenv("TEMPERATURE", "0.7"))
     MAX_TOKENS: int = int(os.getenv("MAX_TOKENS", "2048"))
+    
+    # Rate Limiting Configuration
+    # Delays are in seconds, help prevent hitting API rate limits
+    # With 19 parallel agents, need enough spread to stay under TPM limits
+    REQUEST_DELAY_MIN: float = float(os.getenv("REQUEST_DELAY_MIN", "1.0"))
+    REQUEST_DELAY_MAX: float = float(os.getenv("REQUEST_DELAY_MAX", "3.0"))
+    ENABLE_RATE_LIMITING: bool = os.getenv("ENABLE_RATE_LIMITING", "true").lower() == "true"
+    
+    # Execution Mode
+    SEQUENTIAL_MODE: bool = os.getenv("SEQUENTIAL_MODE", "false").lower() == "true"
     
     # Application Configuration
     DEBUG: bool = os.getenv("DEBUG", "false").lower() == "true"
