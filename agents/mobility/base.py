@@ -78,10 +78,8 @@ Your output must help the reader understand the concept, not merely list steps."
             full_prompt += f"\nContext: {context}"
         
         try:
-            # Invoke LLM
-            from config.llm import create_llm
-            llm = create_llm()
-            response = llm.invoke(full_prompt)
+            # Invoke LLM - use the llm instance from config
+            response = self.llm.invoke(full_prompt)
             
             # Extract and parse JSON
             from utils.json_utils import extract_json_from_text, safe_json_parse
