@@ -27,6 +27,9 @@ class Settings:
     REQUEST_DELAY_MAX: float = float(os.getenv("REQUEST_DELAY_MAX", "3.0"))
     ENABLE_RATE_LIMITING: bool = os.getenv("ENABLE_RATE_LIMITING", "true").lower() == "true"
     
+    # Execution Mode
+    SEQUENTIAL_MODE: bool = os.getenv("SEQUENTIAL_MODE", "false").lower() == "true"
+    
     # Application Configuration
     DEBUG: bool = os.getenv("DEBUG", "false").lower() == "true"
     
