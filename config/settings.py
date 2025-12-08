@@ -12,6 +12,7 @@ class Settings:
     
     # Groq API Configuration
     GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
+    PEXELS_API_KEY: str = os.getenv("PEXELS_API_KEY", "")
     
     # LLM Configuration
     MODEL_NAME: str = os.getenv("MODEL_NAME", "llama-3.3-70b-versatile")
@@ -27,6 +28,11 @@ class Settings:
             raise ValueError(
                 "GROQ_API_KEY is required. Please set it in your .env file.\n"
                 "Get your API key from: https://console.groq.com/keys"
+            )
+        if not self.PEXELS_API_KEY:
+            raise ValueError(
+                "PEXELS_API_KEY is required. Please set it in your .env file.\n"
+                "Get your API key from: https://www.pexels.com/api/new/"
             )
     
     def __repr__(self) -> str:
