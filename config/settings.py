@@ -19,6 +19,12 @@ class Settings:
     TEMPERATURE: float = float(os.getenv("TEMPERATURE", "0.7"))
     MAX_TOKENS: int = int(os.getenv("MAX_TOKENS", "2048"))
     
+    # Rate Limiting Configuration
+    # Delays are in seconds, help prevent hitting API rate limits
+    REQUEST_DELAY_MIN: float = float(os.getenv("REQUEST_DELAY_MIN", "0.85"))
+    REQUEST_DELAY_MAX: float = float(os.getenv("REQUEST_DELAY_MAX", "1.5"))
+    ENABLE_RATE_LIMITING: bool = os.getenv("ENABLE_RATE_LIMITING", "true").lower() == "true"
+    
     # Application Configuration
     DEBUG: bool = os.getenv("DEBUG", "false").lower() == "true"
     

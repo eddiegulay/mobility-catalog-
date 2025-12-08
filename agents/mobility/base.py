@@ -45,54 +45,61 @@ Your output must help the reader understand the concept, not merely list steps."
         self.schema_prompt = schema_prompt
         self.llm = llm
     
-    def generate(self, measure_name: str, context: str = "") -> tuple[Dict[str, Any], str]:
+    def generate(self, measure_name: str, context: str = "") -> tuple:
         """
-        Generate the JSON section for this agent.
+        Generate JSON section for this agent.
         
         Args:
-            measure_name: Name of the mobility measure
-            context: Additional context or requirements
+            measure_name: Name of mobility measure
+            context: Additional context
             
         Returns:
-            Tuple of (json_dict, error_message)
-            If successful: (parsed_json, "")
-            If error: ({}, error_message)
+            Tuple of (result_dict, error_message)
         """
+        import time
+        import random
+        from config.settings import settings
+        
+        # Rate limiting: add random delay to spread out parallel requests
+        if settings.ENABLE_RATE_LIMITING:
+            delay = random.uniform(
+                settings.REQUEST_DELAY_MIN,
+                settings.REQUEST_DELAY_MAX
+            )
+            logger.debug(f"[{self.section_name}] Rate limiting delay: {delay:.2f}s")
+            time.sleep(delay)
+        
         logger.info(f"[{self.section_name}] Generating section for: {measure_name}")
         
-        # Combine universal prompt + section-specific prompt
-        system_content = f"{self.UNIVERSAL_PROMPT}\n\n{self.schema_prompt}"
+        # Construct full prompt
+        full_prompt = f"{self.UNIVERSAL_PROMPT}\n\n{self.schema_prompt}\n\nMobility Measure: {measure_name}"
         
-        # Create user message with measure name and context
-        user_content = f"Mobility Measure: {measure_name}"
         if context:
-            user_content += f"\n\nAdditional Context:\n{context}"
-        
-        messages = [
-            SystemMessage(content=system_content),
-            HumanMessage(content=user_content)
-        ]
+            full_prompt += f"\nContext: {context}"
         
         try:
-            # Call LLM
-            response = self.llm.invoke(messages)
-            output = response.content.strip()
+            # Invoke LLM
+            from config.llm import create_llm
+            llm = create_llm()
+            response = llm.invoke(full_prompt)
             
-            logger.debug(f"[{self.section_name}] Raw output: {output[:200]}...")
+            # Extract and parse JSON
+            from utils.json_utils import extract_json_from_text, safe_json_parse
             
-            # Parse JSON
-            json_data, error = safe_json_parse(output)
+            json_text = extract_json_from_text(response.content)
+            result, parse_error = safe_json_parse(json_text)
             
-            if error:
-                logger.error(f"[{self.section_name}] JSON parsing failed: {error}")
-                return {}, f"JSON parsing error in {self.section_name}: {error}"
+            if parse_error:
+                error_msg = f"JSON parsing error in {self.section_name}: {parse_error}"
+                logger.error(f"[{self.section_name}] {error_msg}")
+                return {}, error_msg
             
             logger.info(f"[{self.section_name}] ✓ Section generated successfully")
-            return json_data, ""
+            return result, None
             
         except Exception as e:
             error_msg = f"Error generating {self.section_name}: {str(e)}"
-            logger.error(error_msg)
+            logger.error(f"[{self.section_name}] {error_msg}")
             return {}, error_msg
     
     def __str__(self) -> str:
