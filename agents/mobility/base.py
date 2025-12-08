@@ -96,7 +96,47 @@ Your output must help the reader understand the concept, not merely list steps."
             return result, None
             
         except Exception as e:
-            error_msg = f"Error generating {self.section_name}: {str(e)}"
+            error_str = str(e)
+            
+            # Check if it's a rate limit error (429)
+            if "429" in error_str or "rate_limit" in error_str.lower():
+                logger.warning(f"[{self.section_name}] Rate limit hit, trying fallback model...")
+                
+                try:
+                    # Retry with fallback model
+                    from config.settings import settings
+                    from langchain_groq import ChatGroq
+                    
+                    fallback_llm = ChatGroq(
+                        api_key=settings.GROQ_API_KEY,
+                        model=settings.FALLBACK_MODEL,
+                        temperature=settings.TEMPERATURE,
+                        max_tokens=settings.MAX_TOKENS,
+                    )
+                    
+                    response = fallback_llm.invoke(full_prompt)
+                    
+                    # Extract and parse JSON
+                    from utils.json_utils import extract_json_from_text, safe_json_parse
+                    
+                    json_text = extract_json_from_text(response.content)
+                    result, parse_error = safe_json_parse(json_text)
+                    
+                    if parse_error:
+                        error_msg = f"JSON parsing error in {self.section_name} (fallback): {parse_error}"
+                        logger.error(f"[{self.section_name}] {error_msg}")
+                        return {}, error_msg
+                    
+                    logger.info(f"[{self.section_name}] ✓ Section generated with fallback model")
+                    return result, None
+                    
+                except Exception as fallback_error:
+                    error_msg = f"Error in fallback for {self.section_name}: {str(fallback_error)}"
+                    logger.error(f"[{self.section_name}] {error_msg}")
+                    return {}, error_msg
+            
+            # Not a rate limit error, return original error
+            error_msg = f"Error generating {self.section_name}: {error_str}"
             logger.error(f"[{self.section_name}] {error_msg}")
             return {}, error_msg
     
