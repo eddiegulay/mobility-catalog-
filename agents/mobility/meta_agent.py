@@ -2,6 +2,7 @@
 
 from agents.mobility.base import BaseMobilityAgent
 from schemas.mobility_measure import MobilityResearchState
+from utils.logger import logger
 
 
 class MetaAgent(BaseMobilityAgent):
@@ -33,10 +34,21 @@ Rules:
 
 def meta_agent_node(state: MobilityResearchState) -> dict:
     """LangGraph node function for meta agent."""
+    from utils.image_search import get_mobility_measure_images
+    
     agent = MetaAgent()
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
     
     if error:
         return {"meta": {}, "errors": [error]}
+    
+    # Add images automatically
+    if result and "images" in result:
+        try:
+            images = get_mobility_measure_images(state["measure_name"], count=3)
+            result["images"] = images
+        except Exception as e:
+            logger.error(f"Failed to fetch images: {e}")
+            result["images"] = []
     
     return {"meta": result, "errors": []}
