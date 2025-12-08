@@ -160,7 +160,7 @@ class CityRole(TypedDict):
     monitoring: List[str]
 
 
-class MobilityMeasureRoles(TypedDict):
+class MobilityMeasureRolesResponsibilitiesDetailed(TypedDict):
     """Roles and responsibilities."""
     developer: StakeholderRole
     housing_association: HousingAssociationRole
@@ -189,7 +189,7 @@ class Savings(TypedDict):
     reduced_need_for_family_car_ownership: str
 
 
-class MobilityMeasureFinancial(TypedDict):
+class MobilityMeasureFinancialModel(TypedDict):
     """Financial model."""
     cost_distribution: CostDistribution
     estimated_costs: EstimatedCosts
@@ -205,21 +205,21 @@ class MobilityMeasureCompliance(TypedDict):
     non_compliance_actions: List[str]
 
 
-class MobilityMeasureVisibility(TypedDict):
+class MobilityMeasureVisibilityAndCommunicationDesign(TypedDict):
     """Visibility and communication."""
     signage: List[str]
     digital: List[str]
     physical_touchpoints: List[str]
 
 
-class MobilityMeasureSelection(TypedDict):
+class MobilityMeasureSelectionLogic(TypedDict):
     """Selection logic and recommendations."""
     requires: List[str]
     not_recommended_if: List[str]
     recommended_combination: List[str]
 
 
-class MobilityMeasureScalability(TypedDict):
+class MobilityMeasureFutureScalability(TypedDict):
     """Future scalability."""
     conditions_for_expansion: List[str]
     extensions: List[str]
@@ -247,12 +247,12 @@ class CompleteMobilityMeasure(TypedDict):
     monitoring: MobilityMeasureMonitoring
     checklist: MobilityMeasureChecklist
     lifecycle: MobilityMeasureLifecycle
-    roles: MobilityMeasureRoles
-    financial: MobilityMeasureFinancial
+    roles_responsibilities_detailed: MobilityMeasureRolesResponsibilitiesDetailed
+    financial_model: MobilityMeasureFinancialModel
     compliance: MobilityMeasureCompliance
-    visibility: MobilityMeasureVisibility
-    selection: MobilityMeasureSelection
-    scalability: MobilityMeasureScalability
+    visibility_and_communication_design: MobilityMeasureVisibilityAndCommunicationDesign
+    selection_logic: MobilityMeasureSelectionLogic
+    future_scalability: MobilityMeasureFutureScalability
 
 
 # ============================================================================
@@ -287,12 +287,12 @@ class MobilityResearchState(TypedDict):
     monitoring: MobilityMeasureMonitoring
     checklist: MobilityMeasureChecklist
     lifecycle: MobilityMeasureLifecycle
-    roles: MobilityMeasureRoles
-    financial: MobilityMeasureFinancial
+    roles_responsibilities_detailed: MobilityMeasureRolesResponsibilitiesDetailed
+    financial_model: MobilityMeasureFinancialModel
     compliance: MobilityMeasureCompliance
-    visibility: MobilityMeasureVisibility
-    selection: MobilityMeasureSelection
-    scalability: MobilityMeasureScalability
+    visibility_and_communication_design: MobilityMeasureVisibilityAndCommunicationDesign
+    selection_logic: MobilityMeasureSelectionLogic
+    future_scalability: MobilityMeasureFutureScalability
     
     # Final output
     complete_measure: CompleteMobilityMeasure

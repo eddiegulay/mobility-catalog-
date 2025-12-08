@@ -391,7 +391,7 @@ Rules:
 def roles_agent_node(state: MobilityResearchState) -> dict:
     agent = RolesAgent()
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
-    return {"roles": result, "errors": [error]} if error else {"roles": result, "errors": []}
+    return {"roles_responsibilities_detailed": result, "errors": [error]} if error else {"roles_responsibilities_detailed": result, "errors": []}
 
 
 # ============================================================================
@@ -436,7 +436,7 @@ Rules:
 def financial_agent_node(state: MobilityResearchState) -> dict:
     agent = FinancialAgent()
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
-    return {"financial": result, "errors": [error]} if error else {"financial": result, "errors": []}
+    return {"financial_model": result, "errors": [error]} if error else {"financial_model": result, "errors": []}
 
 
 # ============================================================================
@@ -499,7 +499,7 @@ Rules:
 def visibility_agent_node(state: MobilityResearchState) -> dict:
     agent = VisibilityAgent()
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
-    return {"visibility": result, "errors": [error]} if error else {"visibility": result, "errors": []}
+    return {"visibility_and_communication_design": result, "errors": [error]} if error else {"visibility_and_communication_design": result, "errors": []}
 
 
 # ============================================================================
@@ -530,7 +530,7 @@ Rules:
 def selection_agent_node(state: MobilityResearchState) -> dict:
     agent = SelectionAgent()
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
-    return {"selection": result, "errors": [error]} if error else {"selection": result, "errors": []}
+    return {"selection_logic": result, "errors": [error]} if error else {"selection_logic": result, "errors": []}
 
 
 # ============================================================================
@@ -560,4 +560,4 @@ Rules:
 def scalability_agent_node(state: MobilityResearchState) -> dict:
     agent = ScalabilityAgent()
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
-    return {"scalability": result, "errors": [error]} if error else {"scalability": result, "errors": []}
+    return {"future_scalability": result, "errors": [error]} if error else {"future_scalability": result, "errors": []}

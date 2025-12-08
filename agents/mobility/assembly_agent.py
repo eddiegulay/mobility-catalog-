@@ -46,12 +46,12 @@ def assembly_agent_node(state: MobilityResearchState) -> dict:
         "monitoring": state.get("monitoring", {}),
         "checklist": state.get("checklist", {}),
         "lifecycle": state.get("lifecycle", {}),
-        "roles": state.get("roles", {}),
-        "financial": state.get("financial", {}),
+        "roles_responsibilities_detailed": state.get("roles_responsibilities_detailed", {}),
+        "financial_model": state.get("financial_model", {}),
         "compliance": state.get("compliance", {}),
-        "visibility": state.get("visibility", {}),
-        "selection": state.get("selection", {}),
-        "scalability": state.get("scalability", {}),
+        "visibility_and_communication_design": state.get("visibility_and_communication_design", {}),
+        "selection_logic": state.get("selection_logic", {}),
+        "future_scalability": state.get("future_scalability", {}),
     }
     
     # Check for missing sections

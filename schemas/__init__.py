@@ -16,12 +16,12 @@ from schemas.mobility_measure import (
     MobilityMeasureMonitoring,
     MobilityMeasureChecklist,
     MobilityMeasureLifecycle,
-    MobilityMeasureRoles,
-    MobilityMeasureFinancial,
+    MobilityMeasureRolesResponsibilitiesDetailed,
+    MobilityMeasureFinancialModel,
     MobilityMeasureCompliance,
-    MobilityMeasureVisibility,
-    MobilityMeasureSelection,
-    MobilityMeasureScalability,
+    MobilityMeasureVisibilityAndCommunicationDesign,
+    MobilityMeasureSelectionLogic,
+    MobilityMeasureFutureScalability,
 )
 
 from schemas.validators import (
@@ -52,12 +52,12 @@ __all__ = [
     "MobilityMeasureMonitoring",
     "MobilityMeasureChecklist",
     "MobilityMeasureLifecycle",
-    "MobilityMeasureRoles",
-    "MobilityMeasureFinancial",
+    "MobilityMeasureRolesResponsibilitiesDetailed",
+    "MobilityMeasureFinancialModel",
     "MobilityMeasureCompliance",
-    "MobilityMeasureVisibility",
-    "MobilityMeasureSelection",
-    "MobilityMeasureScalability",
+    "MobilityMeasureVisibilityAndCommunicationDesign",
+    "MobilityMeasureSelectionLogic",
+    "MobilityMeasureFutureScalability",
     
     # Validators
     "validate_section",

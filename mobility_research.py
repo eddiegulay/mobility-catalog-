@@ -50,12 +50,12 @@ def research_mobility_measure(measure_name: str, context: str = "") -> dict:
         "monitoring": {},
         "checklist": {},
         "lifecycle": {},
-        "roles": {},
-        "financial": {},
+        "roles_responsibilities_detailed": {},
+        "financial_model": {},
         "compliance": {},
-        "visibility": {},
-        "selection": {},
-        "scalability": {},
+        "visibility_and_communication_design": {},
+        "selection_logic": {},
+        "future_scalability": {},
         
         # Output fields
         "complete_measure": {},
