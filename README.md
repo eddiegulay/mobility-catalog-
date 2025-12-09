@@ -1,12 +1,12 @@
 # Mobility Catalog - AI-Powered Mobility Measure Research System
 
-> **Multi-agent LangGraph system for automated mobility measure documentation**
+> **Multi-agent mobility measure documentation**
 
-An intelligent research pipeline that uses 19 specialized AI agents to generate comprehensive, research-quality documentation for sustainable mobility measures. Built with LangGraph and Groq's LLM APIs.
+An research pipeline agents to generate comprehensive, research-quality documentation for sustainable mobility measures. Built with LangGraph and Groq's LLM APIs.
 
 ---
 
-## 🎯 What This Does
+## Overview
 
 This system **automatically researches and documents** mobility measures (e.g., bike sharing, car-free zones, e-scooter programs) by orchestrating 19 specialized AI agents that work in parallel to produce:
 
@@ -30,7 +30,7 @@ This system **automatically researches and documents** mobility measures (e.g., 
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ### Multi-Agent System
 
@@ -89,21 +89,21 @@ This system **automatically researches and documents** mobility measures (e.g., 
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-### 🛡️ **Reliability**
+### Reliability
 - **Partial Save**: Never lose data - saves even with missing sections
 - **Dual-Model Fallback**: Primary → Retry → Fallback model chain
 - **Intelligent Retry**: Extracts wait times and auto-retries
 - **Graceful Degradation**: 84%+ completion even under heavy load
 
-### 🎨 **Quality**
+### Content Quality
 - **Descriptive Content**: Research-quality explanations, not task lists
 - **Template Compliance**: Exact field names matching requirements
 - **Stock Images**: 3 relevant images via Pexels API
 - **Professional Tone**: Neutral, operational, Sweden/EU context
 
-### ⚡ **Performance**
+### Performance
 - **Parallel Execution**: All 19 agents run simultaneously (~12s)
 - **Sequential Mode**: Optional one-at-a-time for reliability (~45s)
 - **Rate Limiting**: Configurable delays to prevent API limits
@@ -111,7 +111,7 @@ This system **automatically researches and documents** mobility measures (e.g., 
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -150,6 +150,7 @@ PEXELS_API_KEY=your_pexels_api_key_here
 # Model Configuration
 MODEL_NAME=openai/gpt-oss-120b
 FALLBACK_MODEL=llama-3.3-70b-versatile
+CLAUDE_MODEL=claude-3-5-sonnet-20240620
 
 # Rate Limiting
 ENABLE_RATE_LIMITING=true
@@ -179,7 +180,7 @@ uv run python mobility_research.py "Electric scooters" \
 
 ---
 
-## 📊 Output Format
+## Output Format
 
 ### Complete JSON Structure
 
@@ -221,7 +222,7 @@ Filename: `{name}-mobility-measure-partial.json`
 
 ---
 
-## 🔧 Advanced Configuration
+## Advanced Configuration
 
 ### Sequential Mode (Maximum Reliability)
 
@@ -233,9 +234,8 @@ SEQUENTIAL_MODE=true
 ```
 
 **Trade-offs:**
-- ✅ Near 100% success rate
-- ✅ Avoids all rate limits
-- ❌ Slower (45s vs 12s)
+- **Pros**: Near 100% success rate, avoids all rate limits
+- **Cons**: Slower (45s vs 12s)
 
 ### Custom Rate Limiting
 
@@ -266,7 +266,7 @@ FALLBACK_MODEL=llama-3.1-8b-instant
 
 ---
 
-## 📈 Performance Metrics
+## Performance Metrics
 
 | Metric | Value | Notes |
 |--------|-------|-------|
@@ -279,7 +279,7 @@ FALLBACK_MODEL=llama-3.1-8b-instant
 
 ---
 
-## 🛠️ System Components
+## System Components
 
 ### Core Files
 
@@ -314,7 +314,7 @@ research_output/
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Rate Limit Errors
 
@@ -347,7 +347,7 @@ uv sync --reinstall
 
 ---
 
-## 🎓 How It Works
+## How It Works
 
 ### 1. Graph Construction
 
@@ -386,7 +386,7 @@ Save Partial Result (prevents data loss)
 
 ---
 
-## 📝 Example Output
+## Example Output
 
 Here's what the system generates for **"Cargo Bikes"**:
 
@@ -411,7 +411,7 @@ Sample excerpt:
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 This is a research project for automating mobility measure documentation. Contributions welcome!
 
@@ -430,13 +430,13 @@ black .
 
 ---
 
-## 📄 License
+## License
 
 MIT License - See LICENSE file
 
 ---
 
-## 🔗 Resources
+## Resources
 
 - **Groq API**: https://console.groq.com/
 - **Pexels API**: https://www.pexels.com/api/
@@ -445,7 +445,7 @@ MIT License - See LICENSE file
 
 ---
 
-## 📞 Support
+## Support
 
 For questions or issues:
 1. Check this README
@@ -455,4 +455,4 @@ For questions or issues:
 
 ---
 
-**Built with ❤️ using LangGraph, Groq, and Pexels**
+**Built with LangGraph, Groq, and Pexels**
