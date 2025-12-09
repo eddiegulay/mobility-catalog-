@@ -1,4 +1,4 @@
-# Mobility Catalog - AI-Powered Mobility Measure Research System
+# Mobility Catalog
 
 > **Multi-agent mobility measure documentation**
 
