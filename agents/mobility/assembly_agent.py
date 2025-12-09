@@ -80,21 +80,27 @@ def assembly_agent_node(state: MobilityResearchState) -> dict:
             "generated_at": datetime.now().isoformat(timespec='seconds') + "Z"
         }
     
-    # Validate complete document (will pass even with empty sections)
+    # Validate complete document
+    # With Haiku/smaller models, we want to be lenient and save even if validation fails
     try:
         from schemas.validators import validate_complete_measure
         is_valid, val_errors = validate_complete_measure(complete_measure)
         
-        if not is_valid and not missing_sections:
-            # Only fail validation if unexpected errors (not just missing sections)
-            logger.error(f"Validation failed: {val_errors}")
-            return {
-                "complete_measure": {},
-                "output_path": "",
-                "errors": [f"Validation errors: {val_errors}"]
-            }
+        if not is_valid:
+            logger.warning(f"Validation warnings: {val_errors}")
+            # We add validation errors to metadata but STILL SAVE the file
+            if "_metadata" not in complete_measure:
+                complete_measure["_metadata"] = {}
+                
+            complete_measure["_metadata"]["validation_errors"] = val_errors
+            complete_measure["_metadata"]["is_valid"] = False
+        else:
+            if "_metadata" not in complete_measure:
+                complete_measure["_metadata"] = {}
+            complete_measure["_metadata"]["is_valid"] = True
+            
     except Exception as e:
-        logger.warning(f"Validation skipped: {e}")
+        logger.warning(f"Validation skipped due to error: {e}")
     
     # Generate output filename
     measure_name = state.get("measure_name", "unknown")

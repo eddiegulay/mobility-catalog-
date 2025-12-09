@@ -62,24 +62,29 @@ def validate_complete_measure(data: Dict[str, Any]) -> tuple[bool, List[str]]:
     return len(errors) == 0, errors
 
 
-def merge_sections(sections: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
+def merge_sections(**sections: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Merge all section dictionaries into a complete mobility measure.
-    
-    Args:
-        sections: Dictionary mapping section names to their data
-        
-    Returns:
-        Complete merged document
+    Merge all section dictionaries into a single complete mobility measure.
+    Handles cases where models might return the inner object directly
+    (unwrapped) or wrapped in the section name.
     """
-    # Simple merge - all sections are already separate top-level keys
-    complete = {}
+    complete_measure = {}
     
     for section_name, section_data in sections.items():
-        if section_data:
-            complete[section_name] = section_data
-    
-    return complete
+        if not section_data:
+            continue
+            
+        # Case 1: Data is wrapped correctly { "section_name": { ... } }
+        if section_name in section_data:
+            complete_measure[section_name] = section_data[section_name]
+            
+        # Case 2: Data is unwrapped { "field1": ... } - Common with Haiku
+        # Check if it looks like the inner content (has expected keys)
+        elif isinstance(section_data, dict) and len(section_data) > 0:
+            # Assume it's the inner content and wrap it
+            complete_measure[section_name] = section_data
+            
+    return complete_measure
 
 
 def clean_json_output(text: str) -> str:

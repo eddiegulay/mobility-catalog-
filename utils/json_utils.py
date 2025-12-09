@@ -59,6 +59,17 @@ def safe_json_parse(text: str) -> tuple[Dict[str, Any], str]:
         return parsed, ""
         
     except json.JSONDecodeError as e:
+        # Fallback: Try ast.literal_eval for Python-style dicts (single quotes, trailing commas)
+        try:
+            import ast
+            # Only try this if it looks like a dict/list
+            if cleaned.startswith("{") or cleaned.startswith("["):
+                parsed = ast.literal_eval(cleaned)
+                if isinstance(parsed, dict):
+                    return parsed, ""
+        except Exception:
+            pass
+            
         return {}, f"JSON parsing error at position {e.pos}: {e.msg}"
     except Exception as e:
         return {}, f"Unexpected error: {str(e)}"
