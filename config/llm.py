@@ -4,44 +4,43 @@ from langchain_groq import ChatGroq
 from config.settings import settings
 
 
+def get_groq_llm():
+    """Get Groq LLM instance."""
+    if not settings.GROQ_API_KEY:
+        return None
+        
+    return ChatGroq(
+        api_key=settings.GROQ_API_KEY,
+        model=settings.MODEL_NAME,
+        temperature=settings.TEMPERATURE,
+        max_tokens=settings.MAX_TOKENS,
+    )
+
+def get_anthropic_llm():
+    """Get Anthropic LLM instance."""
+    if not settings.ANTHROPIC_API_KEY:
+        return None
+        
+    from langchain_anthropic import ChatAnthropic
+    return ChatAnthropic(
+        api_key=settings.ANTHROPIC_API_KEY,
+        model=settings.CLAUDE_MODEL,
+        temperature=settings.TEMPERATURE,
+        max_tokens=settings.MAX_TOKENS,
+    )
+
 def get_llm():
     """
-    Initialize and return a configured LLM instance.
-    
-    Uses Anthropic Claude when MONEY_MODE is enabled (no rate limits),
-    otherwise uses Groq models (free tier with rate limits).
-    
-    Returns:
-        ChatAnthropic or ChatGroq: Configured language model instance
-        
-    Raises:
-        ValueError: If required API keys are not set
+    Get default LLM based on settings.
+    Returns Anthropic if MONEY_MODE is True, else Groq.
     """
-    settings.validate()
-    
-    if settings.MONEY_MODE:
-        # Money mode: Use Anthropic Claude (premium, no rate limits)
-        from langchain_anthropic import ChatAnthropic
-        
-        llm = ChatAnthropic(
-            api_key=settings.ANTHROPIC_API_KEY,
-            model=settings.CLAUDE_MODEL,
-            temperature=settings.TEMPERATURE,
-            max_tokens=settings.MAX_TOKENS,
-        )
-        
-        return llm
-    else:
-        # Free mode: Use Groq models (rate limits apply)
-        llm = ChatGroq(
-            api_key=settings.GROQ_API_KEY,
-            model=settings.MODEL_NAME,
-            temperature=settings.TEMPERATURE,
-            max_tokens=settings.MAX_TOKENS,
-        )
-        
-        return llm
+    if settings.MONEY_MODE and settings.ANTHROPIC_API_KEY:
+        return get_anthropic_llm()
+    return get_groq_llm()
 
+# Initialize instances
+groq_llm = get_groq_llm()
+anthropic_llm = get_anthropic_llm()
 
-# Default LLM instance for reuse across the application
+# Default LLM (legacy support and default behavior)
 llm = get_llm()

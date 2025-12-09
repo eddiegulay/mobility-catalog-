@@ -3,6 +3,7 @@
 from agents.mobility.base import BaseMobilityAgent
 from schemas.mobility_measure import MobilityResearchState
 from utils.logger import logger
+from config.llm import anthropic_llm
 
 
 class MetaAgent(BaseMobilityAgent):
@@ -28,15 +29,15 @@ Rules:
 - category must match the selected catalog category.
 - Do not include any other JSON keys.'''
     
-    def __init__(self):
-        super().__init__("meta", self.SCHEMA_PROMPT)
+    def __init__(self, llm_instance=None):
+        super().__init__("meta", self.SCHEMA_PROMPT, llm_instance)
 
 
 def meta_agent_node(state: MobilityResearchState) -> dict:
     """LangGraph node function for meta agent."""
     from utils.image_search import search_mobility_images
     
-    agent = MetaAgent()
+    agent = MetaAgent(llm_instance=anthropic_llm)
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
     
     if error:

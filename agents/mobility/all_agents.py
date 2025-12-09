@@ -7,6 +7,7 @@ Each agent follows the same pattern as the first 3 agents.
 
 from agents.mobility.base import BaseMobilityAgent
 from schemas.mobility_measure import MobilityResearchState
+from config.llm import groq_llm, anthropic_llm
 
 
 # ============================================================================
@@ -33,12 +34,13 @@ Rules:
 - Reference real mobility patterns and principles
 - 1–3 substantive points per field'''
     
-    def __init__(self):
-        super().__init__("evidence", self.SCHEMA_PROMPT)
+    def __init__(self, llm_instance=None):
+        super().__init__("evidence", self.SCHEMA_PROMPT, llm_instance)
 
 
 def evidence_agent_node(state: MobilityResearchState) -> dict:
-    agent = EvidenceAgent()
+    # Evidence: Groq (Data/Facts)
+    agent = EvidenceAgent(llm_instance=groq_llm)
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
     return {"evidence": result, "errors": [error]} if error else {"evidence": result, "errors": []}
 
@@ -68,12 +70,13 @@ Rules:
 - Use qualitative ranges with explanation when possible
 - Connect impacts to specific conditions or user groups'''
     
-    def __init__(self):
-        super().__init__("impact", self.SCHEMA_PROMPT)
+    def __init__(self, llm_instance=None):
+        super().__init__("impact", self.SCHEMA_PROMPT, llm_instance)
 
 
 def impact_agent_node(state: MobilityResearchState) -> dict:
-    agent = ImpactAgent()
+    # Impact: Anthropic (Nuance/Reasoning)
+    agent = ImpactAgent(llm_instance=anthropic_llm)
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
     return {"impact": result, "errors": [error]} if error else {"impact": result, "errors": []}
 
@@ -103,12 +106,13 @@ Rules:
 - Describe WHY it matters for implementation
 - Provide specific, actionable detail'''
     
-    def __init__(self):
-        super().__init__("requirements", self.SCHEMA_PROMPT)
+    def __init__(self, llm_instance=None):
+        super().__init__("requirements", self.SCHEMA_PROMPT, llm_instance)
 
 
 def requirements_agent_node(state: MobilityResearchState) -> dict:
-    agent = RequirementsAgent()
+    # Requirements: Groq (Structural)
+    agent = RequirementsAgent(llm_instance=groq_llm)
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
     return {"requirements": result, "errors": [error]} if error else {"requirements": result, "errors": []}
 
@@ -136,12 +140,13 @@ Rules:
 - Include relevant dimensions, materials, or technical specs when applicable
 - Explain HOW placement or design affects functionality'''
     
-    def __init__(self):
-        super().__init__("infrastructure", self.SCHEMA_PROMPT)
+    def __init__(self, llm_instance=None):
+        super().__init__("infrastructure", self.SCHEMA_PROMPT, llm_instance)
 
 
 def infrastructure_agent_node(state: MobilityResearchState) -> dict:
-    agent = InfrastructureAgent()
+    # Infrastructure: Groq (Technical)
+    agent = InfrastructureAgent(llm_instance=groq_llm)
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
     return {"infrastructure": result, "errors": [error]} if error else {"infrastructure": result, "errors": []}
 
@@ -176,12 +181,13 @@ Rules:
 - Explain responsibilities with context
 - For phases, describe activities with operational or planning detail'''
     
-    def __init__(self):
-        super().__init__("operations", self.SCHEMA_PROMPT)
+    def __init__(self, llm_instance=None):
+        super().__init__("operations", self.SCHEMA_PROMPT, llm_instance)
 
 
 def operations_agent_node(state: MobilityResearchState) -> dict:
-    agent = OperationsAgent()
+    # Operations: Groq (Process/Steps)
+    agent = OperationsAgent(llm_instance=groq_llm)
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
     return {"operations": result, "errors": [error]} if error else {"operations": result, "errors": []}
 
@@ -207,12 +213,13 @@ Rules:
 - Explain WHAT drives costs
 - Describe benefits with specific detail'''
     
-    def __init__(self):
-        super().__init__("costs", self.SCHEMA_PROMPT)
+    def __init__(self, llm_instance=None):
+        super().__init__("costs", self.SCHEMA_PROMPT, llm_instance)
 
 
 def costs_agent_node(state: MobilityResearchState) -> dict:
-    agent = CostsAgent()
+    # Costs: Groq (Estimates)
+    agent = CostsAgent(llm_instance=groq_llm)
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
     return {"costs": result, "errors": [error]} if error else {"costs": result, "errors": []}
 
@@ -239,12 +246,13 @@ Rules:
 - Provide context on likelihood or severity
 - Maximum 3 most significant risks'''
     
-    def __init__(self):
-        super().__init__("risks", self.SCHEMA_PROMPT)
+    def __init__(self, llm_instance=None):
+        super().__init__("risks", self.SCHEMA_PROMPT, llm_instance)
 
 
 def risks_agent_node(state: MobilityResearchState) -> dict:
-    agent = RisksAgent()
+    # Risks: Anthropic (Critical Thinking)
+    agent = RisksAgent(llm_instance=anthropic_llm)
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
     return {"risks": result, "errors": [error]} if error else {"risks": result, "errors": []}
 
@@ -269,12 +277,13 @@ Rules:
 - Explain WHAT each metric measures and WHY it matters
 - Frequency should include reasoning (e.g., "Quarterly to capture seasonal patterns")'''
     
-    def __init__(self):
-        super().__init__("monitoring", self.SCHEMA_PROMPT)
+    def __init__(self, llm_instance=None):
+        super().__init__("monitoring", self.SCHEMA_PROMPT, llm_instance)
 
 
 def monitoring_agent_node(state: MobilityResearchState) -> dict:
-    agent = MonitoringAgent()
+    # Monitoring: Groq (Metrics)
+    agent = MonitoringAgent(llm_instance=groq_llm)
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
     return {"monitoring": result, "errors": [error]} if error else {"monitoring": result, "errors": []}
 
@@ -301,12 +310,13 @@ Rules:
 - Provide actionable detail, not generic tasks
 - Include context on timing, conditions, or stakeholders involved'''
     
-    def __init__(self):
-        super().__init__("checklist", self.SCHEMA_PROMPT)
+    def __init__(self, llm_instance=None):
+        super().__init__("checklist", self.SCHEMA_PROMPT, llm_instance)
 
 
 def checklist_agent_node(state: MobilityResearchState) -> dict:
-    agent = ChecklistAgent()
+    # Checklist: Groq (Procedural)
+    agent = ChecklistAgent(llm_instance=groq_llm)
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
     return {"checklist": result, "errors": [error]} if error else {"checklist": result, "errors": []}
 
@@ -337,12 +347,13 @@ Rules:
 - Include dependencies, stakeholder coordination, or critical decisions
 - Provide planning context, not just action verbs'''
     
-    def __init__(self):
-        super().__init__("lifecycle", self.SCHEMA_PROMPT)
+    def __init__(self, llm_instance=None):
+        super().__init__("lifecycle", self.SCHEMA_PROMPT, llm_instance)
 
 
 def lifecycle_agent_node(state: MobilityResearchState) -> dict:
-    agent = LifecycleAgent()
+    # Lifecycle: Groq (Sequential)
+    agent = LifecycleAgent(llm_instance=groq_llm)
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
     return {"lifecycle": result, "errors": [error]} if error else {"lifecycle": result, "errors": []}
 
@@ -384,12 +395,13 @@ Rules:
 - Explain HOW each role contributes to measure success
 - Provide operational detail on what tasks involve'''
     
-    def __init__(self):
-        super().__init__("roles", self.SCHEMA_PROMPT)
+    def __init__(self, llm_instance=None):
+        super().__init__("roles", self.SCHEMA_PROMPT, llm_instance)
 
 
 def roles_agent_node(state: MobilityResearchState) -> dict:
-    agent = RolesAgent()
+    # Roles: Anthropic (Complex Interactions)
+    agent = RolesAgent(llm_instance=anthropic_llm)
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
     return {"roles_responsibilities_detailed": result, "errors": [error]} if error else {"roles_responsibilities_detailed": result, "errors": []}
 
@@ -429,12 +441,13 @@ Rules:
 - Explain HOW savings materialize
 - incentives: 1–3 items with specific detail on requirements or mechanisms'''
     
-    def __init__(self):
-        super().__init__("financial", self.SCHEMA_PROMPT)
+    def __init__(self, llm_instance=None):
+        super().__init__("financial", self.SCHEMA_PROMPT, llm_instance)
 
 
 def financial_agent_node(state: MobilityResearchState) -> dict:
-    agent = FinancialAgent()
+    # Financial: Anthropic (Reasoning)
+    agent = FinancialAgent(llm_instance=anthropic_llm)
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
     return {"financial_model": result, "errors": [error]} if error else {"financial_model": result, "errors": []}
 
@@ -462,12 +475,13 @@ Rules:
 - Detail approval steps with stakeholders involved
 - Describe consequences and remediation for non-compliance'''
     
-    def __init__(self):
-        super().__init__("compliance", self.SCHEMA_PROMPT)
+    def __init__(self, llm_instance=None):
+        super().__init__("compliance", self.SCHEMA_PROMPT, llm_instance)
 
 
 def compliance_agent_node(state: MobilityResearchState) -> dict:
-    agent = ComplianceAgent()
+    # Compliance: Anthropic (Regulations)
+    agent = ComplianceAgent(llm_instance=anthropic_llm)
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
     return {"compliance": result, "errors": [error]} if error else {"compliance": result, "errors": []}
 
@@ -492,12 +506,13 @@ Rules:
 - Describe WHERE and WHEN users encounter it
 - Explain HOW it supports awareness or usage'''
     
-    def __init__(self):
-        super().__init__("visibility", self.SCHEMA_PROMPT)
+    def __init__(self, llm_instance=None):
+        super().__init__("visibility", self.SCHEMA_PROMPT, llm_instance)
 
 
 def visibility_agent_node(state: MobilityResearchState) -> dict:
-    agent = VisibilityAgent()
+    # Visibility: Groq (Visual/Design)
+    agent = VisibilityAgent(llm_instance=groq_llm)
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
     return {"visibility_and_communication_design": result, "errors": [error]} if error else {"visibility_and_communication_design": result, "errors": []}
 
@@ -523,12 +538,13 @@ Rules:
 - Explain WHY certain conditions make this unsuitable
 - Suggest combinations that enhance effectiveness with explanation'''
     
-    def __init__(self):
-        super().__init__("selection", self.SCHEMA_PROMPT)
+    def __init__(self, llm_instance=None):
+        super().__init__("selection", self.SCHEMA_PROMPT, llm_instance)
 
 
 def selection_agent_node(state: MobilityResearchState) -> dict:
-    agent = SelectionAgent()
+    # Selection: Anthropic (Decision Logic)
+    agent = SelectionAgent(llm_instance=anthropic_llm)
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
     return {"selection_logic": result, "errors": [error]} if error else {"selection_logic": result, "errors": []}
 
@@ -553,11 +569,12 @@ Rules:
 - Explain HOW extensions would build on initial implementation
 - Provide context on timing, demand thresholds, or enabling factors'''
     
-    def __init__(self):
-        super().__init__("scalability", self.SCHEMA_PROMPT)
+    def __init__(self, llm_instance=None):
+        super().__init__("scalability", self.SCHEMA_PROMPT, llm_instance)
 
 
 def scalability_agent_node(state: MobilityResearchState) -> dict:
-    agent = ScalabilityAgent()
+    # Scalability: Anthropic (Future Planning)
+    agent = ScalabilityAgent(llm_instance=anthropic_llm)
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
     return {"future_scalability": result, "errors": [error]} if error else {"future_scalability": result, "errors": []}

@@ -2,6 +2,7 @@
 
 from agents.mobility.base import BaseMobilityAgent
 from schemas.mobility_measure import MobilityResearchState
+from config.llm import anthropic_llm
 
 
 class OverviewAgent(BaseMobilityAgent):
@@ -24,13 +25,14 @@ Rules:
 - behavioural_primary = describe the main behavioural change this measure aims to influence and why
 - behavioural_secondary = 2–4 supporting behavioural patterns, each explained clearly'''
     
-    def __init__(self):
-        super().__init__("overview", self.SCHEMA_PROMPT)
+    def __init__(self, llm_instance=None):
+        super().__init__("overview", self.SCHEMA_PROMPT, llm_instance)
 
 
 def overview_agent_node(state: MobilityResearchState) -> dict:
     """LangGraph node function for overview agent."""
-    agent = OverviewAgent()
+    # Overview: Anthropic (High Quality Description)
+    agent = OverviewAgent(llm_instance=anthropic_llm)
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
     
     if error:

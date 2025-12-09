@@ -5,6 +5,7 @@ from langchain_core.messages import SystemMessage, HumanMessage
 from config.llm import llm
 from utils.json_utils import safe_json_parse
 from utils.logger import logger
+from agents.mobility.json_fixer import JsonFixerAgent
 
 
 class BaseMobilityAgent:
@@ -33,17 +34,18 @@ GENERAL RULES:
 
 Your output must help the reader understand the concept, not merely list steps."""
     
-    def __init__(self, section_name: str, schema_prompt: str):
+    def __init__(self, section_name: str, schema_prompt: str, llm_instance=None):
         """
         Initialize the mobility agent.
         
         Args:
             section_name: Name of the JSON section this agent produces
             schema_prompt: Section-specific schema and rules
+            llm_instance: Optional specific LLM instance to use (overrides default)
         """
         self.section_name = section_name
         self.schema_prompt = schema_prompt
-        self.llm = llm
+        self.llm = llm_instance if llm_instance else llm
     
     def generate(self, measure_name: str, context: str = "") -> tuple:
         """
@@ -88,9 +90,19 @@ Your output must help the reader understand the concept, not merely list steps."
             result, parse_error = safe_json_parse(json_text)
             
             if parse_error:
-                error_msg = f"JSON parsing error in {self.section_name}: {parse_error}"
-                logger.error(f"[{self.section_name}] {error_msg}")
-                return {}, error_msg
+                error_msg = f"JSON parsing error: {parse_error}"
+                logger.warning(f"[{self.section_name}] {error_msg}. Attempting to fix...")
+                
+                # Attempt to fix
+                fixer = JsonFixerAgent()
+                result, fix_error = fixer.fix_json(json_text, parse_error, full_prompt)
+                
+                if fix_error:
+                    logger.error(f"[{self.section_name}] Fix failed: {fix_error}")
+                    return {}, f"{error_msg}. Fix failed: {fix_error}"
+                
+                logger.info(f"[{self.section_name}] ✓ Section generated and repaired successfully")
+                return result, None
             
             logger.info(f"[{self.section_name}] ✓ Section generated successfully")
             return result, None
@@ -150,9 +162,18 @@ Your output must help the reader understand the concept, not merely list steps."
                     result, parse_error = safe_json_parse(json_text)
                     
                     if parse_error:
-                        error_msg = f"JSON parsing error in {self.section_name} (fallback): {parse_error}"
-                        logger.error(f"[{self.section_name}] {error_msg}")
-                        return {}, error_msg
+                        error_msg = f"JSON parsing error (fallback): {parse_error}"
+                        logger.warning(f"[{self.section_name}] {error_msg}. Attempting to fix...")
+                        
+                        fixer = JsonFixerAgent()
+                        result, fix_error = fixer.fix_json(json_text, parse_error, full_prompt)
+                        
+                        if fix_error:
+                            logger.error(f"[{self.section_name}] Fix failed: {fix_error}")
+                            return {}, f"{error_msg}. Fix failed: {fix_error}"
+                            
+                        logger.info(f"[{self.section_name}] ✓ Section generated and repaired with fallback")
+                        return result, None
                     
                     logger.info(f"[{self.section_name}] ✓ Section generated with fallback model")
                     return result, None

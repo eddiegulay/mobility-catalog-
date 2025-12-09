@@ -2,6 +2,7 @@
 
 from agents.mobility.base import BaseMobilityAgent
 from schemas.mobility_measure import MobilityResearchState
+from config.llm import groq_llm
 
 
 class ContextAgent(BaseMobilityAgent):
@@ -24,13 +25,14 @@ Rules:
 - suitable_strong = describe WHERE and WHY this measure works well (8-15 words per item)
 - suitable_weak = describe conditions that limit effectiveness with reasoning (8-15 words per item)'''
     
-    def __init__(self):
-        super().__init__("context", self.SCHEMA_PROMPT)
+    def __init__(self, llm_instance=None):
+        super().__init__("context", self.SCHEMA_PROMPT, llm_instance)
 
 
 def context_agent_node(state: MobilityResearchState) -> dict:
     """LangGraph node function for context agent."""
-    agent = ContextAgent()
+    # Context: Groq (Simple Lists)
+    agent = ContextAgent(llm_instance=groq_llm)
     result, error = agent.generate(state["measure_name"], state.get("context", ""))
     
     if error:

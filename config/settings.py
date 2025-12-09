@@ -32,8 +32,8 @@ class Settings:
     # Rate Limiting Configuration
     # Delays are in seconds, help prevent hitting API rate limits
     # With 19 parallel agents, need enough spread to stay under TPM limits
-    REQUEST_DELAY_MIN: float = float(os.getenv("REQUEST_DELAY_MIN", "1.0"))
-    REQUEST_DELAY_MAX: float = float(os.getenv("REQUEST_DELAY_MAX", "3.0"))
+    REQUEST_DELAY_MIN: float = float(os.getenv("REQUEST_DELAY_MIN", "2.0"))
+    REQUEST_DELAY_MAX: float = float(os.getenv("REQUEST_DELAY_MAX", "5.0"))
     ENABLE_RATE_LIMITING: bool = os.getenv("ENABLE_RATE_LIMITING", "true").lower() == "true"
     
     # Execution Mode
