@@ -23,10 +23,18 @@ class MetaAgent(BaseMobilityAgent):
   "cost_level": 1-5
 }
 
+Category Definitions:
+- Active Mobility: Supports walking, cycling, e-bikes, and cargo bikes (safe infrastructure, secure parking, maintenance).
+- Shared Mobility: Services where vehicles are collectively used (shared cars, shared bikes, cargo-bike pools).
+- Public Transport: Strengthens access to buses, metro, trains, trams, or integrates housing with transit.
+- Information & Nudging: Increases awareness, visibility, behavioural support, and real-time info.
+- Logistics: Reduces private car need by simplifying tasks (delivery lockers, tool libraries, goods transport).
+
 Rules:
 - short_description = max 20–25 words.
 - tags = 3–7 lowercase keywords.
-- category must match the selected catalog category.
+- tags = 3–7 lowercase keywords.
+- category must be one of: "Active Mobility", "Shared Mobility", "Public Transport", "Information & Nudging", "Logistics".
 - Do not include any other JSON keys.'''
     
     def __init__(self, llm_instance=None):
